@@ -1,43 +1,49 @@
-import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCashAction, getCashAction } from './store/cashReducer';
+import './App.css'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  // incrementCreator,
+  // decrementCreator,
+  asyncIncrementCreator,
+  asyncDecrementCreator,
+} from './store/countReducer'
+import { fetchUsers } from './store/customerReducer'
 import {
   addCustomerAction,
   removeCustomerAction,
-} from './store/customerReducer';
-import { fetchCustomers } from './asyncActions/customers';
-import { Button } from '@mui/material';
+} from './store/customerReducer'
+import { fetchCustomers } from './asyncActions/customers'
+import { Button } from '@mui/material'
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const cash = useSelector((state) => state.cash.cash);
-  const customers = useSelector((state) => state.customers.customers);
+  const count = useSelector((state) => state.countReducer.count)
+  const customers = useSelector((state) => state.customers.customers)
 
-  const AddCash = () => {
-    dispatch(addCashAction(5));
-  };
+  // const AddCash = () => {
+  //   dispatch(incrementCreator())
+  // }
 
-  const getCash = () => {
-    dispatch(getCashAction(5));
-  };
+  // const getCash = () => {
+  //   dispatch(decrementCreator())
+  // }
 
   const addCustomer = (name) => {
     const customer = {
       name,
       id: Date.now(),
-    };
+    }
 
-    dispatch(addCustomerAction(customer));
-  };
+    dispatch(addCustomerAction(customer))
+  }
 
   const removeCustomer = (customer) => {
-    dispatch(removeCustomerAction(customer.id));
-  };
+    dispatch(removeCustomerAction(customer.id))
+  }
 
   return (
     <div className="App">
-      <div style={{ marginTop: '50px', fontSize: '3rem' }}>{cash}</div>
+      <div style={{ marginTop: '50px', fontSize: '3rem' }}>{count}</div>
       <div
         style={{
           display: 'flex',
@@ -46,10 +52,16 @@ function App() {
           marginBottom: '50px',
         }}
       >
-        <Button variant="contained" onClick={AddCash}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(asyncIncrementCreator())}
+        >
           Пополнить счет
         </Button>
-        <Button variant="contained" onClick={getCash}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(asyncDecrementCreator())}
+        >
           Снять со счета
         </Button>
         <Button variant="contained" onClick={() => addCustomer(prompt())}>
@@ -57,6 +69,9 @@ function App() {
         </Button>
         <Button variant="contained" onClick={() => dispatch(fetchCustomers())}>
           Получить клиентов из базы
+        </Button>
+        <Button variant="contained" onClick={() => dispatch(fetchUsers())}>
+          Получить клиентов из саги
         </Button>
       </div>
 
@@ -72,7 +87,7 @@ function App() {
         <div>Клиенты отсутствуют</div>
       )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
